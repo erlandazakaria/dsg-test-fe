@@ -1,95 +1,53 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import DeleteButton from "@/components/DeleteButton";
+import EditButton from "@/components/EditButton";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
 
-export default function Home() {
+export default async function Home() {
+  const data = await axios.get("http://127.0.0.1:8080");
+  // console.log("ASD", data.data)
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <Box sx={{width: "100%", height: "100vh"}}>
+      <Box sx={{width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+        <Box display="flex" mb={2}>
+          <Box display="flex" gap={1}>
+            <TextField size="small" />
+            <Button variant="contained" size="small">Search</Button>
+          </Box>
+          <Button variant="contained" size="small" sx={{ml: 2}}>Create New</Button>
+        </Box>
+        <table>
+          <thead>
+            <tr>
+              <td>Id Produk</td>
+              <td>Merek Produk</td>
+              <td>Jenis Produk</td>
+              <td>Jumlah Stok</td>
+              <td>Harga Produk</td>
+              <td>Keterangan</td>
+              <td>Aksi</td>
+            </tr>
+          </thead>
+          <tbody>
+            {data.data.map((d: any) => (
+              <tr>
+                <td>{d.id}</td>
+                <td>{d.merk}</td>
+                <td>{d.type}</td>
+                <td>{d.stock}</td>
+                <td>{d.price}</td>
+                <td>{d.note}</td>
+                <td>
+                  <EditButton id={d.id}/>
+                  <DeleteButton id={d.id} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Box>
+    </Box>
   );
 }
